@@ -16,7 +16,10 @@
         </td>
         <td><%= link_to book.title,book %></td>
         <td><%= book.body %></td>
+        <!--いいね機能-->
         <td><%= render "favorites/btn", book: book %></td>
+        <!--コメント数のカウント表示-->
+        <td>コメント数： <%= book.book_comments.count %></td>
       </tr>
     <% end %>
   </tbody>
