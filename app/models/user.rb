@@ -10,7 +10,8 @@ class User < ApplicationRecord
   has_many :book_comments, dependent: :destroy
 
   validates :name, length: { minimum: 2, maximum: 20 }, uniqueness: true
-
+  #通知機能関連付け
+  has_many :notifications, dependent: :destroy
 
 
   def get_profile_image
@@ -46,7 +47,7 @@ class User < ApplicationRecord
   def following?(user)
     followings.include?(user)
   end
-  
+
   def self.search_for(content, method)
     if method == 'perfect'
       User.where(name: content)
@@ -58,5 +59,5 @@ class User < ApplicationRecord
       User.where('name LIKE ?', '%' + content + '%')
     end
   end
-  
+
 end
