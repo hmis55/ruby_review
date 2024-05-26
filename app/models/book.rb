@@ -23,4 +23,11 @@ class Book < ApplicationRecord
   def favorited_by?(user)
      favorites.exists?(user_id: user.id)
   end
+  
+  #通知機能　コールバック：after_create使用
+  after_create do
+    user.followers.each do |follower|
+      notifications.create(user_id: follower.id)
+    end
+  end  
 end
