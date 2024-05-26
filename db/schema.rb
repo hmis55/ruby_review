@@ -64,15 +64,17 @@ ActiveRecord::Schema.define(version: 2024_05_24_065807) do
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.string "subject_type"
-    t.integer "subject_id"
-    t.integer "user_id"
-    t.integer "action_type", null: false
-    t.boolean "checked"
+    t.integer "visitor_id", null: false
+    t.integer "visited_id", null: false
+    t.integer "post_id"
+    t.integer "comment_id"
+    t.integer "post_favorite_id"
+    t.integer "comment_favorite_id"
+    t.integer "relationship_id"
+    t.string "action", default: "", null: false
+    t.boolean "is_checked", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["subject_type", "subject_id"], name: "index_notifications_on_subject"
-    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "relationships", force: :cascade do |t|
@@ -98,5 +100,4 @@ ActiveRecord::Schema.define(version: 2024_05_24_065807) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "notifications", "users"
 end

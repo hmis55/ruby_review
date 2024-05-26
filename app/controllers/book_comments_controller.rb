@@ -5,6 +5,9 @@ class BookCommentsController < ApplicationController
     comment.book_id = book.id
     comment.save
     redirect_to request.referer
+    
+    # コメントの投稿に対する通知を作成・保存
+    @book.create_notification_comment!(current_user, @comment.id)
   end
 
   def destroy

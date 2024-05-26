@@ -4,6 +4,10 @@ class FavoritesController < ApplicationController
     favorite = current_user.favorites.new(book_id: book.id)
     favorite.save
     redirect_to request.referer
+    
+    if current_user != @book.user
+     @book.create_notification_favorite_book!(current_user)
+    end
   end
 
   def destroy

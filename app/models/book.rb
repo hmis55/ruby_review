@@ -2,7 +2,7 @@ class Book < ApplicationRecord
   belongs_to :user
   has_many :favorites, dependent: :destroy
   has_many :book_comments, dependent: :destroy
-  has_many :notification, as: :notifiable, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 
   validates :title,presence:true
   validates :body,presence:true,length:{maximum:200}
@@ -23,11 +23,24 @@ class Book < ApplicationRecord
   def favorited_by?(user)
      favorites.exists?(user_id: user.id)
   end
-  
-  #通知機能　コールバック：after_create使用
-  after_create do
-    user.followers.each do |follower|
-      notifications.create(user_id: follower.id)
-    end
-  end  
+
+  # いいね通知機能
+ def create_notification_favorite_book!(current_user)
+   # 同じユーザーが同じ投稿に既にいいねしていないかを確認
+   existing_notification = Notification.find_by(book_id: self.id, visitor_id: current_user.id, action: "favorite_book")
+
+   # すでにいいねされていない場合のみ通知レコードを作成
+   if existing_notification.nil? && current_user != self.user
+     notification = Notification.new(
+       book_id: self.id,
+       visitor_id: current_user.id,
+       visited_id: self.user.id,
+       action: "favorite_post"
+     )
+
+     if notification.valid?
+       notification.save
+     end
+   end
+ end
 end

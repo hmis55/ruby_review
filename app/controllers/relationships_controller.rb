@@ -6,6 +6,8 @@ before_action :authenticate_user!
     user = User.find(params[:user_id])
     current_user.follow(user)
     redirect_to request.referer
+    # フォロー通知を作成・保存
+    @user.create_notification_follow!(current_user)
   end
 
   #ユーザーのフォローを解除するためのアクション

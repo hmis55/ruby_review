@@ -1,4 +1,11 @@
 class Notification < ApplicationRecord
-  belongs_to :user
-  belongs_to :notifiable, polymorphic: true
+  default_scope -> { order(created_at: "DESC") }
+
+  belongs_to :book, optional: true
+  belongs_to :book_comment, optional: true
+  belongs_to :favorite, optional: true
+  belongs_to :relationship, optional: true
+
+  belongs_to :visitor, class_name: "User", foreign_key: "visitor_id", optional: true
+  belongs_to :visited, class_name: "User", foreign_key: "visited_id", optional: true
 end
